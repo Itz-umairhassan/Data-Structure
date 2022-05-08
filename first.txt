@@ -1,0 +1,9 @@
+8
+0 lahore,2 1 3 
+1 kasur,1 7
+2 jazira,0
+3 bakhar,0
+4 okara,3 1 3 6
+5 jhang,2 0 3 
+6 khosab,1 4
+7 sahiwal,1 5
