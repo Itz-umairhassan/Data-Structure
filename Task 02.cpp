@@ -68,6 +68,7 @@ bool compare_time(task t1, task t2) {
 class scheduling {
 	list<task>l;
 	queue<task>q;
+	task prev_top;
 public:
 
 	void write() {
@@ -164,12 +165,29 @@ public:
 	void start_req(int time, int& seq);
 	//void requests(int arrival_time);
 	int assign_request(int time);
-	task get_top() { return q.front(); }
-	void remove_top() { q.pop(); }
+
+	void set_top(task temp) {  
+		prev_top = temp;
+	}
+	// later we'll use it in main function for waiting and turnaround time...
+	task get_top() {
+		return prev_top;
+	}
+
+	//void remove_top() { q.pop(); }
 };
 
 void scheduling::start_req(int time, int& seq) {
 	//while (!q.empty()) { q.pop(); }
+	bool was_emp = q.empty();
+	while (!q.empty()) {
+		l.push_back(q.front());
+		seq--;
+		q.pop();
+	}
+
+	if (!was_emp)
+		sort();
 
 	while (!l.empty()) {
 		task temp = l.front();
@@ -177,7 +195,7 @@ void scheduling::start_req(int time, int& seq) {
 		l.pop_front();
 
 		cout << seq << " . " << " request with name " << temp.name << " having time " << temp.time << " at "
-			<< time << endl;
+			<< time << "(Arrival Time = " << temp.arrival_time << " ) " << endl;
 		seq++;
 	}
 }
@@ -196,7 +214,8 @@ int scheduling::assign_request(int time) {
 	
 	cout << " Request " << temp.name << " having time " << temp.time << " is assigned at " << time <<
 		endl << endl;
-
+	set_top(temp);
+	q.pop();
 	return temp.time-1;
 }
 
@@ -220,17 +239,13 @@ int main() {
 	int sq = 1;
 	int tick = 0, busyfor, exec_start = 0;
 	s.read(tick);
-	s.sort();
+	//s.sort();
 	s.display2();
 
 	cout << "\n\n";
 	bool free = true;
 	s.start_req(tick, sq);
-	/*s.start_req(tick, sq);
-	s.start_req(tick, sq);
-	s.start_req(tick, sq);
-	s.start_req(tick, sq);
-	s.start_req(tick, sq);*/
+	
 	cout << "\n\n";
 	while(tick<SIMULATION_TIME) {
 
@@ -240,7 +255,7 @@ int main() {
 			
 			system("pause");
 			s.read(tick);
-			s.sort();
+			//s.sort();
 			s.start_req(tick,sq);
 			s.display2();
 		}
@@ -265,7 +280,7 @@ int main() {
 				cout << temp.name << " " << temp.time << " " << waiting_time 
 					<< " " << turn_around_time << endl;
 				cout << "CPU becomes free at " << tick << "\n\n";
-				s.remove_top();
+				
 				continue;
 			}
 		}
