@@ -32,7 +32,7 @@ public:
 	}
 };
 
-int Time_calculation::t = 0;int Time_calculation::w = 0;
+int Time_calculation::t = 0; int Time_calculation::w = 0;
 float Time_calculation::turnaround = 0;float Time_calculation::waiting = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
